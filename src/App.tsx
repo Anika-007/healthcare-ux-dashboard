@@ -8,10 +8,12 @@ import SystemArchitectureSection from './components/sections/SystemArchitectureS
 import InsightLayerSection from './components/sections/InsightLayerSection';
 import ActionFrameworkSection from './components/sections/ActionFrameworkSection';
 import PeopleDirectorySection from './components/sections/PeopleDirectorySection';
+import CursorRipple from './components/ui/CursorRipple';
 
 function App() {
   return (
     <div className="relative">
+      <CursorRipple />
       <HeroSection />
       <HealthcareContextSection />
       <TeamAnalyticsSection />

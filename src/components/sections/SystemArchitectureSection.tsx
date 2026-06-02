@@ -57,7 +57,28 @@ const connections: Connection[] = [
 
 export default function SystemArchitectureSection() {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+
+  const getConnectedNodes = (nodeId: string) => {
+    const connected = new Set<string>();
+    connections.forEach(conn => {
+      if (conn.from === nodeId) connected.add(conn.to);
+      if (conn.to === nodeId) connected.add(conn.from);
+    });
+    return connected;
+  };
+
+  const isNodeHighlighted = (nodeId: string) => {
+    if (!selectedNode) return hoveredNode === nodeId;
+    if (selectedNode === nodeId) return true;
+    return getConnectedNodes(selectedNode).has(nodeId);
+  };
+
+  const isConnectionHighlighted = (conn: Connection) => {
+    if (!selectedNode) return hoveredNode === conn.from || hoveredNode === conn.to;
+    return conn.from === selectedNode || conn.to === selectedNode;
+  };
 
   return (
     <section className="min-h-screen flex items-center justify-center py-32 px-8">
@@ -106,33 +127,46 @@ export default function SystemArchitectureSection() {
                 const toNode = nodes.find(n => n.id === conn.to);
                 if (!fromNode || !toNode) return null;
 
-                const isHighlighted = hoveredNode === conn.from || hoveredNode === conn.to;
+                const isHighlighted = isConnectionHighlighted(conn);
 
                 return (
                   <motion.line
                     key={`${conn.from}-${conn.to}`}
                     initial={{ pathLength: 0, opacity: 0 }}
-                    whileInView={{ pathLength: 1, opacity: isHighlighted ? 0.6 : 0.2 }}
+                    animate={{ 
+                      pathLength: 1, 
+                      opacity: isHighlighted ? 0.8 : 0.15,
+                      strokeDashoffset: isHighlighted ? [0, -20] : 0
+                    }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1, delay: index * 0.05 }}
+                    transition={{ 
+                      pathLength: { duration: 1, delay: index * 0.05 },
+                      opacity: { duration: 0.3 },
+                      strokeDashoffset: { duration: 2, repeat: Infinity, ease: "linear" }
+                    }}
                     x1={fromNode.x}
                     y1={fromNode.y}
                     x2={toNode.x}
                     y2={toNode.y}
                     stroke={isHighlighted ? fromNode.color : '#666'}
-                    strokeWidth={isHighlighted ? 2 : 1}
-                    strokeDasharray={isHighlighted ? "0" : "5,5"}
+                    strokeWidth={isHighlighted ? 3 : 1}
+                    strokeDasharray={isHighlighted ? "10,5" : "5,5"}
                   />
                 );
               })}
 
               {nodes.map((node, index) => {
                 const isCentralSystem = node.id === 'eds' || node.id === 'digital-terrain';
+                const highlighted = isNodeHighlighted(node.id);
                 return (
                 <g key={node.id}>
                   <motion.circle
                     initial={{ scale: 0, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
+                    animate={{
+                      scale: highlighted ? 1.1 : 1,
+                      fillOpacity: highlighted ? 0.4 : (isCentralSystem ? 0.3 : 0.2)
+                    }}
                     viewport={{ once: true }}
                     transition={{ 
                       duration: 0.5, 
@@ -142,14 +176,14 @@ export default function SystemArchitectureSection() {
                     }}
                     cx={node.x}
                     cy={node.y}
-                    r={hoveredNode === node.id ? 45 : (isCentralSystem ? 45 : 40)}
+                    r={isCentralSystem ? 45 : 40}
                     fill={node.color}
-                    fillOpacity={isCentralSystem ? 0.3 : 0.2}
                     stroke={node.color}
-                    strokeWidth={isCentralSystem ? 3 : 2}
+                    strokeWidth={highlighted ? 4 : (isCentralSystem ? 3 : 2)}
                     filter={isCentralSystem ? "url(#strongGlow)" : "url(#glow)"}
                     onMouseEnter={() => setHoveredNode(node.id)}
                     onMouseLeave={() => setHoveredNode(null)}
+                    onClick={() => setSelectedNode(selectedNode === node.id ? null : node.id)}
                     className="cursor-pointer transition-all duration-300"
                   />
                   <motion.text

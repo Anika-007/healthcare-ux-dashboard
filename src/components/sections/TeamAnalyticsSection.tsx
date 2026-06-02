@@ -1,30 +1,31 @@
 import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import CustomTooltip from '../ui/CustomTooltip';
 
 const genderData = [
-  { name: 'Male', value: 15, color: '#3B82F6' },
-  { name: 'Female', value: 9, color: '#8B5CF6' },
+  { name: 'Male', value: 15, color: '#3B82F6', total: 24 },
+  { name: 'Female', value: 9, color: '#8B5CF6', total: 24 },
 ];
 
 const experienceData = [
-  { range: '0-2', value: 3 },
-  { range: '2-5', value: 5 },
-  { range: '5-8', value: 11 },
-  { range: '8+', value: 5 },
+  { range: '0-2 years', value: 3, total: 24 },
+  { range: '2-5 years', value: 5, total: 24 },
+  { range: '5-8 years', value: 11, total: 24 },
+  { range: '8+ years', value: 5, total: 24 },
 ];
 
 const tenureData = [
-  { range: '<1', value: 5 },
-  { range: '1-3', value: 10 },
-  { range: '3-5', value: 7 },
-  { range: '5+', value: 2 },
+  { range: '<1 year', value: 5, total: 24 },
+  { range: '1-3 years', value: 10, total: 24 },
+  { range: '3-5 years', value: 7, total: 24 },
+  { range: '5+ years', value: 2, total: 24 },
 ];
 
 const rolesData = [
-  { role: 'UX', value: 18, color: '#10B981' },
-  { role: 'Senior', value: 4, color: '#3B82F6' },
-  { role: 'Interns', value: 2, color: '#F59E0B' },
-  { role: 'Specialists', value: 2, color: '#8B5CF6' },
+  { role: 'UX Designers', value: 18, color: '#10B981', total: 24 },
+  { role: 'Senior/Lead', value: 4, color: '#3B82F6', total: 24 },
+  { role: 'Interns', value: 2, color: '#F59E0B', total: 24 },
+  { role: 'Specialists', value: 2, color: '#8B5CF6', total: 24 },
 ];
 
 export default function TeamAnalyticsSection() {
@@ -68,13 +69,7 @@ export default function TeamAnalyticsSection() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    background: 'rgba(18, 20, 26, 0.95)', 
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '12px'
-                  }} 
-                />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
             <div className="flex justify-center gap-6 mt-4">
@@ -99,13 +94,7 @@ export default function TeamAnalyticsSection() {
               <BarChart data={experienceData}>
                 <XAxis dataKey="range" stroke="#9CA3AF" />
                 <YAxis stroke="#9CA3AF" />
-                <Tooltip 
-                  contentStyle={{ 
-                    background: 'rgba(18, 20, 26, 0.95)', 
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '12px'
-                  }} 
-                />
+                <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="value" fill="#3B82F6" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -123,13 +112,7 @@ export default function TeamAnalyticsSection() {
               <BarChart data={tenureData}>
                 <XAxis dataKey="range" stroke="#9CA3AF" />
                 <YAxis stroke="#9CA3AF" />
-                <Tooltip 
-                  contentStyle={{ 
-                    background: 'rgba(18, 20, 26, 0.95)', 
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '12px'
-                  }} 
-                />
+                <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="value" fill="#10B981" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -157,13 +140,7 @@ export default function TeamAnalyticsSection() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    background: 'rgba(18, 20, 26, 0.95)', 
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '12px'
-                  }} 
-                />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
             <div className="flex flex-wrap justify-center gap-4 mt-4">
