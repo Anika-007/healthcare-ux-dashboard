@@ -18,14 +18,20 @@ class SoundManager {
 
   // Start background music
   async startAmbient() {
-    if (!this.backgroundMusic || this.isPlaying) return;
+    if (!this.backgroundMusic) return;
+    
+    // If already playing, don't restart
+    if (this.isPlaying && !this.backgroundMusic.paused) return;
     
     try {
       this.isPlaying = true;
+      this.backgroundMusic.currentTime = 0; // Start from beginning
       await this.backgroundMusic.play();
+      console.log('Music started successfully');
     } catch (error) {
-      console.log('Audio playback failed:', error);
-      // Browser may require user interaction first
+      console.log('Audio playback requires user interaction first');
+      this.isPlaying = false;
+      // Browser may require user interaction first - will retry on first click
     }
   }
 

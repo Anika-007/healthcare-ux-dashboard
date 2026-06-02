@@ -142,30 +142,35 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   useEffect(() => {
-    // Start music immediately on mount
-    if (soundEnabled) {
-      soundManager.startAmbient();
-    }
-    return () => soundManager.stopAmbient();
-  }, [soundEnabled]);
-
-  // Auto-play music on first user interaction
-  useEffect(() => {
-    const handleFirstInteraction = () => {
+    // Try to start music immediately on mount
+    const tryStartMusic = async () => {
       if (soundEnabled) {
-        soundManager.startAmbient();
+        await soundManager.startAmbient();
+      }
+    };
+    
+    tryStartMusic();
+
+    // Also try on first user interaction (in case autoplay is blocked)
+    const handleFirstInteraction = async () => {
+      if (soundEnabled) {
+        await soundManager.startAmbient();
       }
       // Remove listeners after first interaction
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('keydown', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
     };
 
     document.addEventListener('click', handleFirstInteraction);
     document.addEventListener('keydown', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
 
     return () => {
+      soundManager.stopAmbient();
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('keydown', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
     };
   }, [soundEnabled]);
 
