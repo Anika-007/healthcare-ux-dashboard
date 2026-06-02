@@ -142,10 +142,31 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   useEffect(() => {
+    // Start music immediately on mount
     if (soundEnabled) {
       soundManager.startAmbient();
     }
     return () => soundManager.stopAmbient();
+  }, [soundEnabled]);
+
+  // Auto-play music on first user interaction
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      if (soundEnabled) {
+        soundManager.startAmbient();
+      }
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
   }, [soundEnabled]);
 
   const handleAnswer = (optionScores: { Fire: number; Water: number; Air: number; Earth: number }) => {
@@ -496,14 +517,47 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
               className="text-center"
             >
               <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
-                Select your date of birth
+                Select your birth month and day
               </h1>
-              <input
-                type="date"
-                value={birthDate}
-                onChange={(e) => setBirthDate(e.target.value)}
-                className="w-full bg-white/5 border-2 border-white/10 rounded-2xl px-8 py-6 text-2xl text-center focus:outline-none focus:border-cyan-500 transition-all"
-              />
+              <div className="flex gap-4 justify-center">
+                <select
+                  value={birthDate.split('-')[0] || ''}
+                  onChange={(e) => {
+                    const day = birthDate.split('-')[1] || '01';
+                    setBirthDate(`${e.target.value}-${day}`);
+                  }}
+                  className="bg-white/5 border-2 border-white/10 rounded-2xl px-6 py-4 text-xl focus:outline-none focus:border-cyan-500 transition-all"
+                >
+                  <option value="">Month</option>
+                  <option value="01">January</option>
+                  <option value="02">February</option>
+                  <option value="03">March</option>
+                  <option value="04">April</option>
+                  <option value="05">May</option>
+                  <option value="06">June</option>
+                  <option value="07">July</option>
+                  <option value="08">August</option>
+                  <option value="09">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+                <select
+                  value={birthDate.split('-')[1] || ''}
+                  onChange={(e) => {
+                    const month = birthDate.split('-')[0] || '01';
+                    setBirthDate(`${month}-${e.target.value}`);
+                  }}
+                  className="bg-white/5 border-2 border-white/10 rounded-2xl px-6 py-4 text-xl focus:outline-none focus:border-cyan-500 transition-all"
+                >
+                  <option value="">Day</option>
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                    <option key={day} value={day.toString().padStart(2, '0')}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <button
                 onClick={() => {
                   if (birthDate) {
