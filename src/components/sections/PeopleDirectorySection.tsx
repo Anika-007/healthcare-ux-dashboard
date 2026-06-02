@@ -6,7 +6,7 @@ interface Person {
   name: string;
   role: string;
   experience: string;
-  type: 'Builder' | 'Thinker' | 'Hybrid';
+  type: 'Builder' | 'Thinker' | 'Hybrid' | 'Specialist' | 'Innovator' | 'Generalist' | 'System Architect' | 'Execution Specialist' | 'Flexible Builder' | 'Influencer' | 'Stakeholder Specialist' | 'Problem Solver' | 'Enterprise Designer' | 'Research Specialist' | 'Strategic Leader' | 'Early Career' | 'Visual Specialist' | 'Senior Specialist' | 'Information Architect' | 'Intern';
   focus: string;
   strengths: string[];
   projects: string[];
@@ -14,58 +14,220 @@ interface Person {
 
 const people: Person[] = [
   {
-    name: 'Alex Chen',
+    name: 'Ankulekha Bhattacharyya',
+    role: 'UX Designer',
+    experience: '5-7 years',
+    type: 'Builder',
+    focus: 'Enterprise UX',
+    strengths: ['System Design', 'UX Execution', 'Enterprise Workflows'],
+    projects: ['Enterprise Tools', 'Internal UX Systems'],
+  },
+  {
+    name: 'Praneetha D',
+    role: 'UX Designer',
+    experience: '5-6 years',
+    type: 'Builder',
+    focus: 'Enterprise UX',
+    strengths: ['UX Execution', 'Workflow Design', 'UI Design'],
+    projects: ['Internal Platforms', 'Enterprise Tools'],
+  },
+  {
+    name: 'Sravani Chode',
+    role: 'UX Designer',
+    experience: '5-6 years',
+    type: 'Builder',
+    focus: 'Enterprise UX',
+    strengths: ['UX Design', 'UI Systems', 'Execution'],
+    projects: ['Enterprise Applications', 'Internal Systems'],
+  },
+  {
+    name: 'Ajay Soni',
     role: 'Senior UX Designer',
+    experience: '7+ years',
+    type: 'System Architect',
+    focus: 'Design Systems, Benefits',
+    strengths: ['Design Systems', 'Research', 'AI', 'Mentoring'],
+    projects: ['Lean Design System', 'Jupiter', 'CIDA', 'DSBP'],
+  },
+  {
+    name: 'Ayushi Gupta',
+    role: 'UX Designer',
+    experience: '7+ years',
+    type: 'Builder',
+    focus: 'MIRA, C3O',
+    strengths: ['Data Design', 'Enterprise UX', 'Healthcare'],
+    projects: ['MIRA', 'C3O'],
+  },
+  {
+    name: 'Aayush Wykes',
+    role: 'UX Designer',
+    experience: '6+ years',
+    type: 'Innovator',
+    focus: 'AI, Unified Desktop',
+    strengths: ['AI UX', 'Accessibility', 'Research'],
+    projects: ['Unified Desktop', 'AI Research', 'Google AI Integration'],
+  },
+  {
+    name: 'Shalaka Sushant Vajirkar',
+    role: 'UX Designer',
     experience: '8+ years',
     type: 'Builder',
-    focus: 'EDS, Digital Terrain',
-    strengths: ['System Design', 'Prototyping', 'User Research'],
-    projects: ['EDS Redesign', 'Digital Terrain v2', 'Payment Integrity Dashboard'],
+    focus: 'CPAS',
+    strengths: ['User Research', 'Documentation', 'Figma'],
+    projects: ['CPAS'],
   },
   {
-    name: 'Jordan Smith',
-    role: 'UX Researcher',
-    experience: '5-8 years',
-    type: 'Thinker',
-    focus: 'Care Management',
-    strengths: ['Qualitative Research', 'Data Analysis', 'Strategy'],
-    projects: ['Care Management Study', 'Patient Journey Mapping'],
-  },
-  {
-    name: 'Sam Rivera',
+    name: 'Aarathi',
     role: 'UX Designer',
-    experience: '2-5 years',
-    type: 'Hybrid',
-    focus: 'AI Projects',
-    strengths: ['AI/ML Design', 'Interaction Design', 'Visual Design'],
-    projects: ['Chatbot Interface', 'Predictive AI Dashboard', 'Agent Studio'],
+    experience: '5+ years',
+    type: 'Generalist',
+    focus: 'CPAS, Magnolia',
+    strengths: ['UX Research', 'Strategy', 'Healthcare'],
+    projects: ['CPAS', 'Magnolia'],
   },
   {
-    name: 'Taylor Kim',
+    name: 'Priyanka Rani',
     role: 'Senior UX Designer',
-    experience: '8+ years',
-    type: 'Builder',
-    focus: 'CPAS, RX Platform',
-    strengths: ['Enterprise UX', 'Design Systems', 'Accessibility'],
-    projects: ['CPAS Modernization', 'RX Platform Redesign'],
+    experience: '6.5+ years',
+    type: 'Execution Specialist',
+    focus: 'Accessibility, Portals',
+    strengths: ['UX Critique', 'Accessibility', 'Large Systems'],
+    projects: ['MSS Accessibility', 'Anthem.com', 'Provider Portal'],
   },
   {
-    name: 'Morgan Lee',
+    name: 'Rishobh Hota',
+    role: 'Senior UX Designer',
+    experience: '5+ years',
+    type: 'System Architect',
+    focus: 'EDS, AI',
+    strengths: ['Design Systems', 'Components', 'Tokens'],
+    projects: ['Enterprise Design System', 'Virtual Assistant'],
+  },
+  {
+    name: 'Nilay Sudhir Dongarwar',
     role: 'UX Designer',
-    experience: '5-8 years',
-    type: 'Hybrid',
-    focus: 'Payment Integrity',
-    strengths: ['Data Visualization', 'Complex Systems', 'Stakeholder Management'],
-    projects: ['Payment Integrity Analytics', 'Fraud Detection UI'],
+    experience: '5+ years',
+    type: 'Flexible Builder',
+    focus: 'MCM',
+    strengths: ['Dashboards', 'Workflows', 'Adaptability'],
+    projects: ['Survey Automation', 'PAD', 'PPS'],
   },
   {
-    name: 'Casey Brown',
+    name: 'Harshit Karir',
+    role: 'UX Designer',
+    experience: '6+ years',
+    type: 'Influencer',
+    focus: 'Carelon RX',
+    strengths: ['Communication', 'Data Thinking', 'Stakeholders'],
+    projects: ['Carelon RX'],
+  },
+  {
+    name: 'Muskan Gupta',
+    role: 'UX Designer',
+    experience: '5+ years',
+    type: 'Stakeholder Specialist',
+    focus: 'EPA',
+    strengths: ['Stakeholder Management', 'Healthcare'],
+    projects: ['EPA', 'Prism'],
+  },
+  {
+    name: 'Bijomon Joseph (Bijo)',
+    role: 'UX Designer',
+    experience: '7+ years',
+    type: 'Problem Solver',
+    focus: 'RX, PI',
+    strengths: ['Rapid Prototyping', 'Complex Systems', 'Calm Thinking'],
+    projects: ['Payment Integrity', 'RX CAB', 'CLM'],
+  },
+  {
+    name: 'Alankrita Goutham',
+    role: 'Senior UX Designer',
+    experience: '6+ years',
+    type: 'Enterprise Designer',
+    focus: 'Digital Terrain',
+    strengths: ['User Interviews', 'Dashboards', 'Internal Tools'],
+    projects: ['PIAS', 'InSync', 'Spectrum', 'CRET'],
+  },
+  {
+    name: 'Makshik Malyan',
+    role: 'UX Designer',
+    experience: '4.5+ years',
+    type: 'Builder',
+    focus: 'Digital Terrain',
+    strengths: ['Dashboards', 'AI Features', 'Enterprise Systems'],
+    projects: ['PIAT', 'Spectrum', 'Audit Security'],
+  },
+  {
+    name: 'Yashraj Shankar Raut',
+    role: 'Senior UX Designer',
+    experience: '5+ years',
+    type: 'Research Specialist',
+    focus: 'EDA, COB-D',
+    strengths: ['User Research', 'Enterprise UX'],
+    projects: ['COB-D'],
+  },
+  {
+    name: 'Ankit K Sanil',
+    role: 'Lead UX Designer',
+    experience: '10+ years',
+    type: 'Strategic Leader',
+    focus: 'AI, Healthcare',
+    strengths: ['AI Design', 'Healthcare', 'Strategy'],
+    projects: ['Care Management', 'Utilization Management', 'Payment Integrity'],
+  },
+  {
+    name: 'Anisha Yadav',
+    role: 'Junior UX Designer',
+    experience: '0.5+ years',
+    type: 'Early Career',
+    focus: 'Benefits, DSBP',
+    strengths: ['UI Design', 'Figma'],
+    projects: ['DSBP', 'Jupiter', 'Cedar'],
+  },
+  {
+    name: 'Vikram Varman M',
+    role: 'Visual Designer',
+    experience: '3+ years',
+    type: 'Visual Specialist',
+    focus: 'Product Management',
+    strengths: ['Presentations', 'Branding', 'Storytelling'],
+    projects: ['Leadership Decks', 'MBM', 'Unified Experience'],
+  },
+  {
+    name: 'Mohammad Shadab Ansari',
+    role: 'Senior UX/UI Designer',
+    experience: '12+ years',
+    type: 'Senior Specialist',
+    focus: 'EDS, AI UX',
+    strengths: ['UI Enhancement', 'Motion Design', 'Systems'],
+    projects: ['EDS', 'Smart Search (Ask Issa)'],
+  },
+  {
+    name: 'P. Ajay Karthik',
+    role: 'UX Designer',
+    experience: '5+ years',
+    type: 'Information Architect',
+    focus: 'Product Experience',
+    strengths: ['IA', 'Content Systems', 'Structure'],
+    projects: ['Digest', 'Sydney IA', 'POSH'],
+  },
+  {
+    name: 'Anika',
     role: 'UX Intern',
-    experience: '0-2 years',
-    type: 'Builder',
-    focus: 'Survey Automation',
-    strengths: ['UI Design', 'User Testing', 'Wireframing'],
-    projects: ['Survey Automation Interface'],
+    experience: '0-1 years',
+    type: 'Intern',
+    focus: 'Learning Phase',
+    strengths: ['Observation', 'Learning', 'Curiosity'],
+    projects: ['EPA Documentation'],
+  },
+  {
+    name: 'Aradhya Gupta',
+    role: 'UX Intern',
+    experience: '0-1 years',
+    type: 'Intern',
+    focus: 'Learning Phase',
+    strengths: ['Learning', 'Exploration'],
+    projects: ['C3O Documentation'],
   },
 ];
 
@@ -77,6 +239,22 @@ export default function PeopleDirectorySection() {
       case 'Builder': return '#10B981';
       case 'Thinker': return '#3B82F6';
       case 'Hybrid': return '#8B5CF6';
+      case 'System Architect': return '#6366F1';
+      case 'Innovator': return '#EC4899';
+      case 'Generalist': return '#14B8A6';
+      case 'Execution Specialist': return '#F59E0B';
+      case 'Flexible Builder': return '#10B981';
+      case 'Influencer': return '#F97316';
+      case 'Stakeholder Specialist': return '#EF4444';
+      case 'Problem Solver': return '#8B5CF6';
+      case 'Enterprise Designer': return '#3B82F6';
+      case 'Research Specialist': return '#06B6D4';
+      case 'Strategic Leader': return '#DC2626';
+      case 'Early Career': return '#84CC16';
+      case 'Visual Specialist': return '#A855F7';
+      case 'Senior Specialist': return '#0EA5E9';
+      case 'Information Architect': return '#6366F1';
+      case 'Intern': return '#22C55E';
       default: return '#6B7280';
     }
   };
