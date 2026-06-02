@@ -26,7 +26,7 @@ export default function ProblemHeatmapSection() {
           <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
             Problem Heatmap
           </h2>
-          <p className="text-gray-400 text-lg">Identifying systemic challenges</p>
+          <p className="text-gray-400 text-lg">Primary organisational bottlenecks</p>
         </motion.div>
 
         <motion.div

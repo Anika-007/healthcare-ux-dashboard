@@ -4,7 +4,7 @@ import { TrendingUp, Zap, Users, Target, AlertCircle } from 'lucide-react';
 const insights = [
   {
     icon: Target,
-    title: 'System-First, Not Product-First',
+    title: 'System-First Organisation',
     description: 'Design decisions are rooted in underlying system architecture rather than isolated product features.',
     color: '#3B82F6',
   },
@@ -16,13 +16,13 @@ const insights = [
   },
   {
     icon: Users,
-    title: 'Stakeholder-Driven Design',
+    title: 'Stakeholders Control Decisions',
     description: 'Design direction is significantly influenced by stakeholder input rather than user research insights.',
     color: '#F59E0B',
   },
   {
     icon: TrendingUp,
-    title: 'AI is Present But Immature',
+    title: 'AI is Widespread But Immature',
     description: '12 AI projects exist across the ecosystem, but patterns and practices are still evolving.',
     color: '#10B981',
   },

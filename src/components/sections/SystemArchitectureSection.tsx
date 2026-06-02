@@ -92,6 +92,13 @@ export default function SystemArchitectureSection() {
                     <feMergeNode in="SourceGraphic"/>
                   </feMerge>
                 </filter>
+                <filter id="strongGlow">
+                  <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
               </defs>
 
               {connections.map((conn, index) => {
@@ -119,7 +126,9 @@ export default function SystemArchitectureSection() {
                 );
               })}
 
-              {nodes.map((node, index) => (
+              {nodes.map((node, index) => {
+                const isCentralSystem = node.id === 'eds' || node.id === 'digital-terrain';
+                return (
                 <g key={node.id}>
                   <motion.circle
                     initial={{ scale: 0, opacity: 0 }}
@@ -133,12 +142,12 @@ export default function SystemArchitectureSection() {
                     }}
                     cx={node.x}
                     cy={node.y}
-                    r={hoveredNode === node.id ? 45 : 40}
+                    r={hoveredNode === node.id ? 45 : (isCentralSystem ? 45 : 40)}
                     fill={node.color}
-                    fillOpacity={0.2}
+                    fillOpacity={isCentralSystem ? 0.3 : 0.2}
                     stroke={node.color}
-                    strokeWidth={2}
-                    filter="url(#glow)"
+                    strokeWidth={isCentralSystem ? 3 : 2}
+                    filter={isCentralSystem ? "url(#strongGlow)" : "url(#glow)"}
                     onMouseEnter={() => setHoveredNode(node.id)}
                     onMouseLeave={() => setHoveredNode(null)}
                     className="cursor-pointer transition-all duration-300"
@@ -160,7 +169,8 @@ export default function SystemArchitectureSection() {
                     {node.label}
                   </motion.text>
                 </g>
-              ))}
+              );
+              })}
             </svg>
 
             <div className="mt-8 flex justify-center gap-8">

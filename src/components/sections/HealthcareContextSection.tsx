@@ -5,25 +5,25 @@ const contextCards = [
   {
     icon: Shield,
     title: 'Payment Integrity',
-    description: 'Preventing overpayments, detecting fraud, and ensuring claim accuracy across millions of healthcare transactions.',
+    description: 'Prevents financial leakage through fraud detection and claim accuracy validation.',
     gradient: 'gradient-blue',
   },
   {
     icon: Heart,
     title: 'Care Management',
-    description: 'Coordinating patient care, improving health outcomes, and reducing hospital readmissions through proactive intervention.',
+    description: 'Improves patient outcomes through coordinated care and proactive health interventions.',
     gradient: 'gradient-green',
   },
   {
     icon: Headphones,
-    title: 'CSR Operations',
-    description: 'Customer service representatives handling member inquiries, provider support, and resolving complex healthcare issues.',
+    title: 'CSR Systems',
+    description: 'Handles member and provider workflows across service touchpoints.',
     gradient: 'gradient-purple',
   },
   {
     icon: Database,
     title: 'Data-Heavy Systems',
-    description: 'Managing claims data, ensuring HIPAA compliance, and processing millions of records with precision and security.',
+    description: 'Required for claims processing, HIPAA compliance, and regulatory reporting.',
     gradient: 'gradient-orange',
   },
 ];

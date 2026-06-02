@@ -3,8 +3,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, 
 
 const genderData = [
   { name: 'Male', value: 15, color: '#3B82F6' },
-  { name: 'Female', value: 7, color: '#8B5CF6' },
-  { name: 'Unknown', value: 2, color: '#6B7280' },
+  { name: 'Female', value: 9, color: '#8B5CF6' },
 ];
 
 const experienceData = [
