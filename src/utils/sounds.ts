@@ -10,8 +10,8 @@ class SoundManager {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       
       // Create background music audio element
-      // Use path that works for both GitHub Pages and Netlify
-      this.backgroundMusic = new Audio('/summer-nights.mp3');
+      // Use correct path for GitHub Pages
+      this.backgroundMusic = new Audio('/healthcare-ux-dashboard/summer-nights.mp3');
       this.backgroundMusic.loop = true;
       this.backgroundMusic.volume = 0.3; // 30% volume
     }
