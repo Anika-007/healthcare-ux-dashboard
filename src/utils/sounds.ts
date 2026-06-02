@@ -3,7 +3,8 @@
 class SoundManager {
   private audioContext: AudioContext | null = null;
   private ambientGain: GainNode | null = null;
-  private ambientOscillator: OscillatorNode | null = null;
+  private musicOscillators: OscillatorNode[] = [];
+  private isPlaying: boolean = false;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -11,30 +12,77 @@ class SoundManager {
     }
   }
 
-  // Initialize ambient background sound
+  // Initialize ambient background music with looping melody
   startAmbient() {
-    if (!this.audioContext) return;
+    if (!this.audioContext || this.isPlaying) return;
+    this.isPlaying = true;
 
-    // Create a soft ambient drone
-    this.ambientOscillator = this.audioContext.createOscillator();
+    // Create gain node for volume control
     this.ambientGain = this.audioContext.createGain();
-
-    this.ambientOscillator.type = 'sine';
-    this.ambientOscillator.frequency.setValueAtTime(110, this.audioContext.currentTime); // Low A note
-    
-    this.ambientGain.gain.setValueAtTime(0.02, this.audioContext.currentTime); // Very quiet
-    
-    this.ambientOscillator.connect(this.ambientGain);
+    this.ambientGain.gain.setValueAtTime(0.08, this.audioContext.currentTime); // Low volume
     this.ambientGain.connect(this.audioContext.destination);
-    
-    this.ambientOscillator.start();
+
+    // Musical progression: Am - F - C - G (common emotional progression)
+    const chordProgression = [
+      [220, 261.63, 329.63], // Am (A, C, E)
+      [174.61, 220, 261.63], // F (F, A, C)
+      [261.63, 329.63, 392],  // C (C, E, G)
+      [196, 246.94, 293.66],  // G (G, B, D)
+    ];
+
+    const playChord = (chord: number[], startTime: number, duration: number) => {
+      chord.forEach((freq, index) => {
+        const oscillator = this.audioContext!.createOscillator();
+        const gainNode = this.audioContext!.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq, startTime);
+
+        // Gentle fade in and out
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(0.15, startTime + 0.3);
+        gainNode.gain.linearRampToValueAtTime(0.1, startTime + duration - 0.3);
+        gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(this.ambientGain!);
+
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+
+        this.musicOscillators.push(oscillator);
+      });
+    };
+
+    // Loop the chord progression
+    const loopMusic = () => {
+      if (!this.isPlaying) return;
+
+      const currentTime = this.audioContext!.currentTime;
+      const chordDuration = 2.5; // Each chord lasts 2.5 seconds
+
+      chordProgression.forEach((chord, index) => {
+        playChord(chord, currentTime + index * chordDuration, chordDuration);
+      });
+
+      // Schedule next loop
+      const totalDuration = chordProgression.length * chordDuration;
+      setTimeout(() => loopMusic(), (totalDuration - 0.5) * 1000); // Slight overlap
+    };
+
+    loopMusic();
   }
 
   stopAmbient() {
-    if (this.ambientOscillator) {
-      this.ambientOscillator.stop();
-      this.ambientOscillator = null;
-    }
+    this.isPlaying = false;
+    this.musicOscillators.forEach(osc => {
+      try {
+        osc.stop();
+      } catch (e) {
+        // Oscillator may already be stopped
+      }
+    });
+    this.musicOscillators = [];
   }
 
   // Click/interaction sound
