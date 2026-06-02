@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Droplet, Wind, Mountain, Download, ArrowRight } from 'lucide-react';
+import { Flame, Droplet, Wind, Mountain, Download, ArrowRight, Volume2, RefreshCw } from 'lucide-react';
 import html2canvas from 'html2canvas';
+import { soundManager } from '../../utils/sounds';
 
 type Element = 'Fire' | 'Water' | 'Air' | 'Earth' | null;
 
@@ -130,15 +131,26 @@ interface ElementGameProps {
 }
 
 export default function ElementGame({ onComplete }: ElementGameProps) {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(-1); // Start at -1 for disclaimer
   const [name, setName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState({ Fire: 0, Water: 0, Air: 0, Earth: 0 });
   const [result, setResult] = useState<Element>(null);
   const [showResult, setShowResult] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
+  useEffect(() => {
+    if (soundEnabled) {
+      soundManager.startAmbient();
+    }
+    return () => soundManager.stopAmbient();
+  }, [soundEnabled]);
 
   const handleAnswer = (optionScores: { Fire: number; Water: number; Air: number; Earth: number }) => {
+    if (soundEnabled) soundManager.playClick();
+    
     const newScores = {
       Fire: scores.Fire + optionScores.Fire,
       Water: scores.Water + optionScores.Water,
@@ -148,6 +160,7 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
     setScores(newScores);
 
     if (currentQuestion < questions.length - 1) {
+      if (soundEnabled) soundManager.playTransition();
       setCurrentQuestion(currentQuestion + 1);
     } else {
       // Calculate result
@@ -158,7 +171,16 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
       else if (newScores.Earth === maxScore) element = 'Earth';
       
       setResult(element);
-      setShowResult(true);
+      setShowLoading(true);
+      
+      if (soundEnabled) soundManager.playSuccess();
+      
+      // Show loading screen then result
+      setTimeout(() => {
+        setShowLoading(false);
+        setShowResult(true);
+        if (soundEnabled) soundManager.playElementReveal(element);
+      }, 2000);
     }
   };
 
@@ -172,6 +194,45 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
       link.click();
     }
   };
+
+  const restartGame = () => {
+    setStep(-1);
+    setName('');
+    setBirthDate('');
+    setCurrentQuestion(0);
+    setScores({ Fire: 0, Water: 0, Air: 0, Earth: 0 });
+    setResult(null);
+    setShowResult(false);
+    setShowLoading(false);
+  };
+
+  // Loading screen
+  if (showLoading && result) {
+    const elementInfo = elementData[result];
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+            className="w-32 h-32 mx-auto mb-8 rounded-full"
+            style={{
+              background: `conic-gradient(from 0deg, ${elementInfo.color}, transparent)`,
+              boxShadow: `0 0 60px ${elementInfo.color}80`,
+            }}
+          />
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            Discovering Your Element...
+          </h2>
+          <p className="text-gray-400 text-lg">Analyzing your responses</p>
+        </motion.div>
+      </div>
+    );
+  }
 
   if (showResult && result) {
     const elementInfo = elementData[result];
@@ -301,7 +362,32 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-8 relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      {/* Computer screen border effect */}
+      <div className="absolute inset-0 border-8 border-gray-800/50 pointer-events-none" style={{
+        boxShadow: 'inset 0 0 100px rgba(0,0,0,0.8), 0 0 20px rgba(139, 92, 246, 0.3)'
+      }} />
+      
+      {/* Sound toggle button */}
+      <button
+        onClick={() => setSoundEnabled(!soundEnabled)}
+        className="absolute top-6 right-6 z-50 p-3 glass-strong rounded-full hover:scale-110 transition-all"
+        style={{ border: '2px solid rgba(139, 92, 246, 0.3)' }}
+      >
+        <Volume2 className={`w-6 h-6 ${soundEnabled ? 'text-purple-400' : 'text-gray-600'}`} />
+      </button>
+
+      {/* Restart button */}
+      {step > 0 && (
+        <button
+          onClick={restartGame}
+          className="absolute top-6 left-6 z-50 p-3 glass-strong rounded-full hover:scale-110 transition-all"
+          style={{ border: '2px solid rgba(139, 92, 246, 0.3)' }}
+        >
+          <RefreshCw className="w-6 h-6 text-purple-400" />
+        </button>
+      )}
+      
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(30)].map((_, i) => (
@@ -324,6 +410,49 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
 
       <div className="relative z-10 max-w-2xl w-full">
         <AnimatePresence mode="wait">
+          {step === -1 && (
+            <motion.div
+              key="disclaimer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="text-center glass-strong rounded-3xl p-12 border-2 border-purple-500/30"
+            >
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-24 h-24 mx-auto mb-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center"
+                style={{ boxShadow: '0 0 40px rgba(139, 92, 246, 0.6)' }}
+              >
+                <Flame className="w-12 h-12 text-white" />
+              </motion.div>
+              
+              <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+                Find Your Element
+              </h1>
+              
+              <div className="bg-yellow-500/10 border-2 border-yellow-500/30 rounded-2xl p-6 mb-8">
+                <p className="text-yellow-200 text-lg leading-relaxed">
+                  ⚠️ <strong>Important:</strong> Please think carefully before answering each question.
+                </p>
+                <p className="text-yellow-200/80 mt-3">
+                  You cannot go back after answering, but you can restart the game anytime.
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  if (soundEnabled) soundManager.playClick();
+                  setStep(0);
+                }}
+                className="px-12 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl text-xl font-semibold hover:scale-105 transition-all"
+                style={{ boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)' }}
+              >
+                Begin Your Journey
+              </button>
+            </motion.div>
+          )}
+
           {step === 0 && (
             <motion.div
               key="name"
@@ -344,7 +473,12 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
                 autoFocus
               />
               <button
-                onClick={() => name && setStep(1)}
+                onClick={() => {
+                  if (name) {
+                    if (soundEnabled) soundManager.playClick();
+                    setStep(1);
+                  }
+                }}
                 disabled={!name}
                 className="mt-8 px-12 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl text-xl font-semibold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -371,7 +505,12 @@ export default function ElementGame({ onComplete }: ElementGameProps) {
                 className="w-full bg-white/5 border-2 border-white/10 rounded-2xl px-8 py-6 text-2xl text-center focus:outline-none focus:border-cyan-500 transition-all"
               />
               <button
-                onClick={() => birthDate && setStep(2)}
+                onClick={() => {
+                  if (birthDate) {
+                    if (soundEnabled) soundManager.playClick();
+                    setStep(2);
+                  }
+                }}
                 disabled={!birthDate}
                 className="mt-8 px-12 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl text-xl font-semibold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
