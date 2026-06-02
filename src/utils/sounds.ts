@@ -10,10 +10,12 @@ class SoundManager {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       
       // Create background music audio element
-      // Use correct path for GitHub Pages
-      this.backgroundMusic = new Audio('/healthcare-ux-dashboard/summer-nights.mp3');
+      // Use correct path for GitHub Pages with cache busting
+      const timestamp = Date.now();
+      this.backgroundMusic = new Audio(`/healthcare-ux-dashboard/summer-nights.mp3?v=${timestamp}`);
       this.backgroundMusic.loop = true;
       this.backgroundMusic.volume = 0.3; // 30% volume
+      console.log('🎵 Music initialized:', this.backgroundMusic.src);
     }
   }
 
@@ -28,9 +30,9 @@ class SoundManager {
       this.isPlaying = true;
       this.backgroundMusic.currentTime = 0; // Start from beginning
       await this.backgroundMusic.play();
-      console.log('Music started successfully');
+      console.log('✅ Music started successfully! Volume:', this.backgroundMusic.volume);
     } catch (error) {
-      console.log('Audio playback requires user interaction first');
+      console.error('❌ Audio playback failed:', error);
       this.isPlaying = false;
       // Browser may require user interaction first - will retry on first click
     }
